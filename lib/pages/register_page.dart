@@ -1,7 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:chat_app_firebase/services/auth/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:chat_app_firebase/components/my_button.dart';
 import 'package:chat_app_firebase/components/my_text_field.dart';
+import 'package:provider/provider.dart';
 
 class RegisterPage extends StatefulWidget {
   final void Function()? onTap;
@@ -18,7 +20,22 @@ class _RegisterPageState extends State<RegisterPage> {
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
   var confirmPasswordController = TextEditingController();
-  void signUp() {}
+  void signUp() async {
+    if (passwordController.text != confirmPasswordController.text) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Password not match')));
+      return;
+    }
+    final authService = context.read<AuthService>();
+    try {
+      await authService.signUpWithEmailandPassword(
+          emailController.text.toString(), passwordController.text.toString());
+    } catch (e) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(e.toString())));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
