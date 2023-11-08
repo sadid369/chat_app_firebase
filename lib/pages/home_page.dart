@@ -19,54 +19,90 @@ class _HomePageState extends State<HomePage> {
     await authService.signOut();
   }
 
-  Widget _buildUserList() {
-    return StreamBuilder(
-      stream: FirebaseFirestore.instance.collection('users').snapshots(),
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return const Text('Error');
-        }
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-        return ListView(
-          children: snapshot.data!.docs
-              .map<Widget>((doc) => _buildUserItemList(doc))
-              .toList(),
-        );
-      },
-    );
-  }
-
-  Widget _buildUserItemList(DocumentSnapshot documentSnapshot) {
-    Map<String, dynamic> data =
-        documentSnapshot.data()! as Map<String, dynamic>;
-
-    if (_auth.currentUser!.email != data['email']) {
-      return ListTile(
-        title: Text(data['email']),
-        onTap: () {
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => ChatPage(
-                receiverUserEmail: data['email'], receiverUserID: data['uid']),
-          ));
-        },
-      );
-    } else {
-      return Container();
-    }
-  }
-
+  bool snackBarCalled = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Home Page'),
-        actions: [IconButton(onPressed: signOut, icon: Icon(Icons.logout))],
+        title: const Text('Home Page'),
+        actions: [
+          IconButton(onPressed: signOut, icon: const Icon(Icons.logout))
+        ],
       ),
-      body: _buildUserList(),
+      bottomNavigationBar: Container(
+        padding: EdgeInsets.symmetric(horizontal: 20),
+        height: 70,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Icon(Icons.home_outlined),
+            InkWell(
+              onTap: () {},
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                decoration: BoxDecoration(
+                    color: snackBarCalled ? Colors.transparent : Colors.black,
+                    borderRadius: BorderRadius.circular(20)),
+                child: Row(
+                  children: [
+                    snackBarCalled
+                        ? Icon(
+                            Icons.abc,
+                            color: Colors.black,
+                          )
+                        : Icon(
+                            Icons.add,
+                            color: Colors.white,
+                          ),
+                    Text(
+                      'New Chat',
+                      style: TextStyle(color: Colors.white),
+                    )
+                  ],
+                ),
+              ),
+            ),
+            Icon(
+              Icons.account_circle_outlined,
+            )
+          ],
+        ),
+      ),
     );
   }
 }
+
+
+//  ScaffoldMessenger.of(context).showSnackBar(
+//                   SnackBar(
+//                     clipBehavior: Clip.none,
+
+//                     width: MediaQuery.of(context).size.width,
+//                     onVisible: () {
+//                       snackBarCalled = true;
+//                       setState(() {});
+//                     },
+
+//                     // margin: EdgeInsets.all(25),
+//                     backgroundColor: Colors.grey.shade100.withOpacity(0.1),
+//                     elevation: 0,
+//                     behavior: SnackBarBehavior.floating,
+//                     // margin: EdgeInsets.all(5),
+
+//                     shape: BeveledRectangleBorder(
+//                         borderRadius: BorderRadius.circular(15)),
+//                     action: SnackBarAction(
+//                       label: 'ok',
+//                       onPressed: () {},
+//                     ),
+//                     content: AlertDialog(
+//                       elevation: 0,
+//                       content: ListTile(
+//                         contentPadding: EdgeInsets.zero,
+//                         leading: Icon(Icons.chat),
+//                         title: Text('New Chat'),
+//                         subtitle: Text("Send a message to your contact"),
+//                       ),
+//                     ),
+//                   ),
+//                 );

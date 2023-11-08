@@ -1,9 +1,9 @@
+import 'package:chat_app_firebase/cupertio_button.dart';
 import 'package:chat_app_firebase/firebase_options.dart';
-import 'package:chat_app_firebase/pages/login_page.dart';
-import 'package:chat_app_firebase/pages/register_page.dart';
+
 import 'package:chat_app_firebase/services/auth/auth_gate.dart';
 import 'package:chat_app_firebase/services/auth/auth_service.dart';
-import 'package:chat_app_firebase/services/auth/login_or_register.dart';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const AuthGate(),
+      home: const ActionSheetApp(),
     );
   }
 }

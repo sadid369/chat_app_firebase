@@ -55,7 +55,7 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(
                   height: 50,
                 ),
-                Text(
+                const Text(
                   'Welcome Back',
                   style: TextStyle(
                     fontSize: 16,
@@ -88,13 +88,13 @@ class _LoginPageState extends State<LoginPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('Not a member?'),
-                    SizedBox(
+                    const Text('Not a member?'),
+                    const SizedBox(
                       width: 4,
                     ),
                     GestureDetector(
                       onTap: widget.onTap,
-                      child: Text(
+                      child: const Text(
                         'Register now',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,

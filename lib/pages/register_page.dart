@@ -59,7 +59,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 const SizedBox(
                   height: 50,
                 ),
-                Text(
+                const Text(
                   "Let's create an account for you!",
                   style: TextStyle(
                     fontSize: 16,
@@ -99,13 +99,13 @@ class _RegisterPageState extends State<RegisterPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('Already a member?'),
-                    SizedBox(
+                    const Text('Already a member?'),
+                    const SizedBox(
                       width: 4,
                     ),
                     GestureDetector(
                       onTap: widget.onTap,
-                      child: Text(
+                      child: const Text(
                         'Login now',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
