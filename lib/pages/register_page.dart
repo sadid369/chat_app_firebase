@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:chat_app_firebase/model/register.dart';
 import 'package:chat_app_firebase/services/auth/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:chat_app_firebase/components/my_button.dart';
@@ -17,11 +18,14 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  var emailController = TextEditingController();
-  var passwordController = TextEditingController();
-  var confirmPasswordController = TextEditingController();
+  var uNameController = TextEditingController();
+  var uEmailController = TextEditingController();
+  var uPhoneController = TextEditingController();
+  var uPasswordController = TextEditingController();
+  var uConfirmPasswordController = TextEditingController();
   void signUp() async {
-    if (passwordController.text != confirmPasswordController.text) {
+    if (uPasswordController.text.toString() !=
+        uConfirmPasswordController.text.toString()) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text('Password not match')));
       return;
@@ -29,7 +33,13 @@ class _RegisterPageState extends State<RegisterPage> {
     final authService = context.read<AuthService>();
     try {
       await authService.signUpWithEmailandPassword(
-          emailController.text.toString(), passwordController.text.toString());
+        user: RegisterModel(
+          uPassword: uPasswordController.text.toString(),
+          uName: uNameController.text.toString(),
+          uEmail: uEmailController.text.toString(),
+          uPhone: uPhoneController.text.toString(),
+        ),
+      );
     } catch (e) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text(e.toString())));
@@ -69,21 +79,35 @@ class _RegisterPageState extends State<RegisterPage> {
                   height: 25,
                 ),
                 MyTextField(
-                    controller: emailController,
+                    controller: uNameController,
+                    hintText: 'Name',
+                    obscureText: false),
+                const SizedBox(
+                  height: 10,
+                ),
+                MyTextField(
+                    controller: uEmailController,
                     hintText: 'Email',
                     obscureText: false),
                 const SizedBox(
                   height: 10,
                 ),
                 MyTextField(
-                    controller: passwordController,
+                    controller: uPhoneController,
+                    hintText: 'Phone',
+                    obscureText: false),
+                const SizedBox(
+                  height: 10,
+                ),
+                MyTextField(
+                    controller: uPasswordController,
                     hintText: 'Password',
                     obscureText: true),
                 const SizedBox(
                   height: 10,
                 ),
                 MyTextField(
-                    controller: confirmPasswordController,
+                    controller: uConfirmPasswordController,
                     hintText: 'Confirm Password',
                     obscureText: true),
                 const SizedBox(
