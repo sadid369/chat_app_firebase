@@ -7,12 +7,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ChatPage extends StatefulWidget {
-  final String receiverUserEmail;
-  final String receiverUserID;
+  final String name;
   const ChatPage({
     Key? key,
-    required this.receiverUserEmail,
-    required this.receiverUserID,
+    required this.name,
   }) : super(key: key);
 
   @override
@@ -23,83 +21,51 @@ class _ChatPageState extends State<ChatPage> {
   final TextEditingController _messageController = TextEditingController();
   final ChatService _chatService = ChatService();
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-  void sendMessage() async {
-    if (_messageController.text.isNotEmpty) {
-      await _chatService.sendMessage(
-          widget.receiverUserID, _messageController.text);
-      _messageController.clear();
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.receiverUserEmail),
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            child: _buildMessageList(),
-          ),
-          _buildMessageInput(),
-          const SizedBox(
-            height: 25,
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget _buildMessageList() {
-    return StreamBuilder(
-      stream: _chatService.getMessage(
-        widget.receiverUserID,
-        _firebaseAuth.currentUser!.uid,
-      ),
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return Text('Error ${snapshot.error}');
-        }
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Text('Loading');
-        }
-        print(snapshot.data!.docs.toString());
-        return ListView(
-          children: snapshot.data!.docs
-              .map((document) => _buildMessageItem(document))
-              .toList(),
-        );
-      },
-    );
-  }
-
-  Widget _buildMessageItem(DocumentSnapshot documentSnapshot) {
-    Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
-
-    var alignment = (data['senderId'] == _firebaseAuth.currentUser!.uid)
-        ? Alignment.centerRight
-        : Alignment.centerLeft;
-
-    return Container(
-      alignment: alignment,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment:
-              (data['senderId'] == _firebaseAuth.currentUser!.uid)
-                  ? CrossAxisAlignment.end
-                  : CrossAxisAlignment.start,
-          mainAxisAlignment:
-              (data['senderId'] == _firebaseAuth.currentUser!.uid)
-                  ? MainAxisAlignment.end
-                  : MainAxisAlignment.start,
+    var mWidth = MediaQuery.of(context).size.width;
+    var mHeight = MediaQuery.of(context).size.height;
+    return SafeArea(
+      child: Scaffold(
+        body: Column(
           children: [
-            Text(data['senderEmail']),
-            const SizedBox(
-              height: 5,
+            SizedBox(
+              height: 20,
             ),
-            ChatBubble(message: data['message'])
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    widget.name,
+                    style: TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(
+                    width: mWidth * 0.15,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Icon(Icons.video_call_rounded),
+                        InkWell(
+                          onTap: () {},
+                          child: const Icon(Icons.call),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(child: Container()),
+            _buildMessageInput(),
+            const SizedBox(
+              height: 25,
+            )
           ],
         ),
       ),
@@ -118,9 +84,9 @@ class _ChatPageState extends State<ChatPage> {
                 obscureText: false),
           ),
           IconButton(
-            onPressed: sendMessage,
+            onPressed: () {},
             icon: const Icon(
-              Icons.arrow_upward,
+              Icons.send,
               size: 40,
             ),
           ),

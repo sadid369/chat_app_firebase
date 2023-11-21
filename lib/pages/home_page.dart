@@ -216,10 +216,19 @@ class _HomePageState extends State<HomePage> {
                 child: ListView.builder(
                   itemCount: profileList.length,
                   itemBuilder: (context, index) {
-                    return MsgTitle(
-                      imgUrl: profileList[index]['imgUrl'],
-                      name: profileList[index]['name'],
-                      msg: profileList[index]['msg'],
+                    return InkWell(
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) {
+                            return ChatPage(name: profileList[index]['name']);
+                          },
+                        ));
+                      },
+                      child: MsgTitle(
+                        imgUrl: profileList[index]['imgUrl'],
+                        name: profileList[index]['name'],
+                        msg: profileList[index]['msg'],
+                      ),
                     );
                   },
                 ),
