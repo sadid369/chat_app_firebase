@@ -4,52 +4,64 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Message {
-  final String senderId;
-  final String senderEmail;
-  final String receiverId;
-  final String message;
-  final Timestamp timestamp;
+  String fromId;
+  String mId;
+  String message;
+  String magType;
+  String read;
+  String sent;
+  String toId;
   Message({
-    required this.senderId,
-    required this.senderEmail,
-    required this.receiverId,
+    required this.fromId,
+    required this.mId,
     required this.message,
-    required this.timestamp,
+    this.magType = 'text',
+    this.read = "",
+    required this.sent,
+    required this.toId,
   });
 
   Message copyWith({
-    String? senderId,
-    String? senderEmail,
-    String? receiverId,
+    String? fromId,
+    String? mId,
     String? message,
-    Timestamp? timestamp,
+    String? magType,
+    String? read,
+    String? sent,
+    String? toId,
   }) {
     return Message(
-      senderId: senderId ?? this.senderId,
-      senderEmail: senderEmail ?? this.senderEmail,
-      receiverId: receiverId ?? this.receiverId,
+      fromId: fromId ?? this.fromId,
+      mId: mId ?? this.mId,
       message: message ?? this.message,
-      timestamp: timestamp ?? this.timestamp,
+      magType: magType ?? this.magType,
+      read: read ?? this.read,
+      sent: sent ?? this.sent,
+      toId: toId ?? this.toId,
     );
   }
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'senderId': senderId,
-      'senderEmail': senderEmail,
-      'receiverId': receiverId,
+      'fromId': fromId,
+      'mId': mId,
       'message': message,
-      'timestamp': timestamp,
+      'magType': magType,
+      'read': read,
+      'sent': sent,
+      'toId': toId,
     };
   }
 
   factory Message.fromMap(Map<String, dynamic> map) {
     return Message(
-      senderId: map['senderId'] as String,
-      senderEmail: map['senderEmail'] as String,
-      receiverId: map['receiverId'] as String,
+      fromId: map['fromId'] as String,
+      mId: map['mId'] as String,
       message: map['message'] as String,
-      timestamp: map['timestamp'] as Timestamp,
+      magType: map['magType'] as String,
+      read: map['read'] as String,
+      sent: map['sent'] as String,
+      toId: map['toId'] as String,
     );
   }
 
@@ -60,6 +72,6 @@ class Message {
 
   @override
   String toString() {
-    return 'Message(senderId: $senderId, senderEmail: $senderEmail, receiverId: $receiverId, message: $message, timestamp: $timestamp)';
+    return 'Message(fromId: $fromId, mId: $mId, message: $message, magType: $magType, read: $read, sent: $sent, toId: $toId)';
   }
 }

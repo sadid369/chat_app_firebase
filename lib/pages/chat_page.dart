@@ -1,16 +1,21 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:chat_app_firebase/components/chat_bubble.dart';
-import 'package:chat_app_firebase/components/my_text_field.dart';
-import 'package:chat_app_firebase/services/chat/chat_services.dart';
+import 'package:chat_app_firebase/model/message.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import 'package:chat_app_firebase/components/chat_bubble.dart';
+import 'package:chat_app_firebase/components/my_text_field.dart';
+import 'package:chat_app_firebase/services/chat/chat_services.dart';
 
 class ChatPage extends StatefulWidget {
   final String name;
+  final String toId;
   const ChatPage({
     Key? key,
     required this.name,
+    required this.toId,
   }) : super(key: key);
 
   @override
@@ -84,7 +89,12 @@ class _ChatPageState extends State<ChatPage> {
                 obscureText: false),
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              context
+                  .read<ChatService>()
+                  .sendMessage(_messageController.text, widget.toId);
+              _messageController.text = "";
+            },
             icon: const Icon(
               Icons.send,
               size: 40,

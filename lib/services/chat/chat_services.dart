@@ -5,43 +5,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ChatService extends ChangeNotifier {
-  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  static final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
-
-  Future<void> sendMessage(String receiverId, String message) async {
-    final String currentUserId = _firebaseAuth.currentUser!.uid;
-    final String currentUserEmail = _firebaseAuth.currentUser!.email.toString();
-    final Timestamp timestamp = Timestamp.now();
-
-    Message newMessage = Message(
-        senderId: currentUserId,
-        senderEmail: currentUserEmail,
-        receiverId: receiverId,
-        message: message,
-        timestamp: timestamp);
-
-    List<String> ids = [currentUserId, receiverId];
-    ids.sort();
-    String chatRoomId = ids.join("_");
-
-    await _firebaseFirestore
-        .collection('chat_rooms')
-        .doc(chatRoomId)
-        .collection("messages")
-        .add(newMessage.toMap());
-  }
-
-  Stream<QuerySnapshot> getMessage(String userId, String otherUserId) {
-    List<String> ids = [userId, otherUserId];
-    ids.sort();
-    String chatRoomId = ids.join("_");
-    return _firebaseFirestore
-        .collection("chat_rooms")
-        .doc(chatRoomId)
-        .collection('messages')
-        .orderBy('timestamp', descending: false)
-        .snapshots();
-  }
+  static String currentUserId = _firebaseAuth.currentUser!.uid;
 
   Future<List<RegisterModel>> getAllUser() async {
     List<RegisterModel> users = [];
@@ -55,5 +21,46 @@ class ChatService extends ChangeNotifier {
       }
     }
     return users;
+  }
+
+  List<String> createChatId(String fromId, String toId) {
+    return ['${fromId}_${toId}', '${fromId}_${toId}'];
+  }
+
+  Future<String> checkIfChatExists(String fromId, String toId) async {
+    var allChatRoom = await _firebaseFirestore.collection('chatroom').get();
+    for (QueryDocumentSnapshot<Map<String, dynamic>> eachChat
+        in allChatRoom.docs) {
+      if (createChatId(fromId, toId).contains(eachChat.id)) {
+        return eachChat.id;
+      }
+    }
+    return '';
+  }
+
+  void sendMessage(String msg, String toId) async {
+    var chatId = await checkIfChatExists(currentUserId, toId);
+    var sentTime = DateTime.now().millisecondsSinceEpoch;
+    var newMessage = Message(
+        fromId: currentUserId,
+        mId: sentTime.toString(),
+        message: msg,
+        sent: sentTime.toString(),
+        toId: toId);
+    if (chatId != "") {
+      _firebaseFirestore
+          .collection('chatroom')
+          .doc(chatId)
+          .collection('messages')
+          .doc(sentTime.toString())
+          .set(newMessage.toMap());
+    } else {
+      _firebaseFirestore
+          .collection('chatroom')
+          .doc(createChatId(newMessage.fromId, newMessage.toId)[0])
+          .collection('messages')
+          .doc(sentTime.toString())
+          .set(newMessage.toMap());
+    }
   }
 }
