@@ -1,5 +1,7 @@
+import 'package:chat_app_firebase/model/register.dart';
 import 'package:chat_app_firebase/pages/chat_page.dart';
 import 'package:chat_app_firebase/services/auth/auth_service.dart';
+import 'package:chat_app_firebase/services/chat/chat_services.dart';
 import 'package:chat_app_firebase/widgets/msg_title.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dotted_border/dotted_border.dart';
@@ -212,27 +214,38 @@ class _HomePageState extends State<HomePage> {
             ),
             Expanded(
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: mWidth * 0.03),
-                child: ListView.builder(
-                  itemCount: profileList.length,
-                  itemBuilder: (context, index) {
-                    return InkWell(
-                      onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) {
-                            return ChatPage(name: profileList[index]['name']);
-                          },
-                        ));
-                      },
-                      child: MsgTitle(
-                        imgUrl: profileList[index]['imgUrl'],
-                        name: profileList[index]['name'],
-                        msg: profileList[index]['msg'],
-                      ),
-                    );
-                  },
-                ),
-              ),
+                  padding: EdgeInsets.symmetric(horizontal: mWidth * 0.03),
+                  child: FutureBuilder<List<RegisterModel>>(
+                    future: context.read<ChatService>().getAllUser(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                      return ListView.builder(
+                        itemCount: snapshot.data!.length,
+                        itemBuilder: (context, index) {
+                          var currUsers = snapshot.data![index];
+                          return InkWell(
+                            onTap: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) {
+                                  return ChatPage(
+                                      name: snapshot.data![index].uName);
+                                },
+                              ));
+                            },
+                            child: MsgTitle(
+                              imgUrl: snapshot.data![index].uProfilePic,
+                              name: snapshot.data![index].uName,
+                              msg: snapshot.data![index].uEmail,
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  )),
             ),
           ],
         ),

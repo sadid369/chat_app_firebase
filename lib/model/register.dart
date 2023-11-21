@@ -2,6 +2,7 @@ import 'dart:convert';
 
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 class RegisterModel {
+  final String? uid;
   final String uName;
   final String uEmail;
   final String uPassword;
@@ -11,6 +12,7 @@ class RegisterModel {
   final bool isOnline;
   final String? gender;
   RegisterModel({
+    this.uid,
     required this.uPassword,
     required this.uName,
     required this.uEmail,
@@ -22,6 +24,7 @@ class RegisterModel {
   });
 
   RegisterModel copyWith({
+    String? uid,
     String? uName,
     String? uEmail,
     String? uPassword,
@@ -32,6 +35,7 @@ class RegisterModel {
     String? gender,
   }) {
     return RegisterModel(
+      uid: uid ?? this.uid,
       uPassword: uPassword ?? this.uPassword,
       uName: uName ?? this.uName,
       uEmail: uEmail ?? this.uEmail,
@@ -45,6 +49,7 @@ class RegisterModel {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
+      'uid': uid,
       'uName': uName,
       'uEmail': uEmail,
       'uPassword': uPassword,
@@ -58,6 +63,7 @@ class RegisterModel {
 
   factory RegisterModel.fromMap(Map<String, dynamic> map) {
     return RegisterModel(
+      uid: map['uid'] as String,
       uName: map['uName'] as String,
       uEmail: map['uEmail'] as String,
       uPassword: map['uPassword'] as String,
@@ -76,6 +82,6 @@ class RegisterModel {
 
   @override
   String toString() {
-    return 'RegisterModel(uName: $uName, uEmail: $uEmail,uPassword: $uPassword,uPhone: $uPhone, uProfilePic: $uProfilePic, isActive: $isActive, isOnline: $isOnline, gender: $gender)';
+    return 'RegisterModel(uName: $uName, uEmail: $uEmail,uPassword: $uPassword,uPhone: $uPhone, uProfilePic: $uProfilePic, isActive: $isActive, isOnline: $isOnline, gender: $gender ,uid: $uid)';
   }
 }

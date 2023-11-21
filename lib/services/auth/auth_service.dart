@@ -32,7 +32,7 @@ class AuthService extends ChangeNotifier {
       _firebaseFirestore
           .collection('users')
           .doc(userCredential.user!.uid)
-          .set(user.toMap());
+          .set(user.copyWith(uid: userCredential.user!.uid).toMap());
       return userCredential;
     } on FirebaseAuthException catch (e) {
       throw Exception(e.code);

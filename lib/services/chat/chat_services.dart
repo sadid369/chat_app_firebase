@@ -1,4 +1,5 @@
 import 'package:chat_app_firebase/model/message.dart';
+import 'package:chat_app_firebase/model/register.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -40,5 +41,19 @@ class ChatService extends ChangeNotifier {
         .collection('messages')
         .orderBy('timestamp', descending: false)
         .snapshots();
+  }
+
+  Future<List<RegisterModel>> getAllUser() async {
+    List<RegisterModel> users = [];
+
+    var arrUsersData = await _firebaseFirestore.collection('users').get();
+    for (QueryDocumentSnapshot<Map<String, dynamic>> user
+        in arrUsersData.docs) {
+      var dataModel = RegisterModel.fromMap(user.data());
+      if (dataModel.uid != _firebaseAuth.currentUser!.uid) {
+        users.add(RegisterModel.fromMap(user.data()));
+      }
+    }
+    return users;
   }
 }

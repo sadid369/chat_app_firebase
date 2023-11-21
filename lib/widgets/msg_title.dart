@@ -34,7 +34,9 @@ class _MsgTitleState extends State<MsgTitle> {
                 child: ClipRRect(
                     borderRadius: BorderRadius.circular(25),
                     child: Image.network(
-                      widget.imgUrl,
+                      widget.imgUrl.isEmpty
+                          ? "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?size=338&ext=jpg&ga=GA1.1.44546679.1698969600&semt=ais"
+                          : widget.imgUrl,
                       fit: BoxFit.cover,
                     )),
               ),
