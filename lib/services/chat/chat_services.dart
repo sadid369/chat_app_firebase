@@ -63,4 +63,15 @@ class ChatService extends ChangeNotifier {
           .set(newMessage.toMap());
     }
   }
+
+  Future<Stream<QuerySnapshot<Map<String, dynamic>>>> getAllMessages(
+      String toId) async {
+    var chatId = await checkIfChatExists(currentUserId, toId);
+    print('Chat id: $chatId');
+    return _firebaseFirestore
+        .collection('chatroom')
+        .doc("tRRP5A5UrNfhxDhVpHIL3bp9HGW2_7UytD6wLw1ZXe3cWl9rgiOJoBob2")
+        .collection('messages')
+        .snapshots();
+  }
 }

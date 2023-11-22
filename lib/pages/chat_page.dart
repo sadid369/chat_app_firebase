@@ -26,6 +26,17 @@ class _ChatPageState extends State<ChatPage> {
   final TextEditingController _messageController = TextEditingController();
   final ChatService _chatService = ChatService();
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  Stream<QuerySnapshot<Map<String, dynamic>>>? chatStream;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  getChatStream() async {
+    chatStream = await context.read<ChatService>().getAllMessages(widget.toId);
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +77,29 @@ class _ChatPageState extends State<ChatPage> {
                 ],
               ),
             ),
-            Expanded(child: Container()),
+            Expanded(
+                child: StreamBuilder(
+              stream: chatStream,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                if (snapshot.hasData) {
+                  return ListView.builder(
+                    itemCount: snapshot.data!.docs.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        title: Text(
+                            '${Message.fromMap(snapshot.data!.docs[index].data()).message}'),
+                      );
+                    },
+                  );
+                }
+                return Container();
+              },
+            )),
             _buildMessageInput(),
             const SizedBox(
               height: 25,
