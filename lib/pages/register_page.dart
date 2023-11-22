@@ -1,6 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:chat_app_firebase/model/register.dart';
+import 'package:chat_app_firebase/pages/login_page.dart';
 import 'package:chat_app_firebase/services/auth/auth_service.dart';
+import 'package:chat_app_firebase/services/chat/chat_services.dart';
 import 'package:flutter/material.dart';
 import 'package:chat_app_firebase/components/my_button.dart';
 import 'package:chat_app_firebase/components/my_text_field.dart';
@@ -30,7 +32,7 @@ class _RegisterPageState extends State<RegisterPage> {
           .showSnackBar(SnackBar(content: Text('Password not match')));
       return;
     }
-    final authService = context.read<AuthService>();
+    final authService = context.read<ChatService>();
     try {
       await authService.signUpWithEmailandPassword(
         user: RegisterModel(
@@ -40,6 +42,11 @@ class _RegisterPageState extends State<RegisterPage> {
           uPhone: uPhoneController.text.toString(),
         ),
       );
+      uNameController.text = "";
+      uEmailController.text = "";
+      uPhoneController.text = "";
+      uPasswordController.text = "";
+      uConfirmPasswordController.text = "";
     } catch (e) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text(e.toString())));
@@ -128,7 +135,11 @@ class _RegisterPageState extends State<RegisterPage> {
                       width: 4,
                     ),
                     GestureDetector(
-                      onTap: widget.onTap,
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => LoginPage(),
+                        ));
+                      },
                       child: const Text(
                         'Login now',
                         style: TextStyle(

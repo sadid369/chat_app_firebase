@@ -1,5 +1,6 @@
 import 'package:chat_app_firebase/cupertio_button.dart';
 import 'package:chat_app_firebase/firebase_options.dart';
+import 'package:chat_app_firebase/pages/login_page.dart';
 
 import 'package:chat_app_firebase/services/auth/auth_gate.dart';
 import 'package:chat_app_firebase/services/auth/auth_service.dart';
@@ -17,9 +18,6 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-          create: (context) => AuthService(),
-        ),
         ChangeNotifierProvider(
           create: (context) => ChatService(),
         )
@@ -41,7 +39,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const AuthGate(),
+      home: const LoginPage(),
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:chat_app_firebase/model/register.dart';
 import 'package:chat_app_firebase/pages/chat_page.dart';
+import 'package:chat_app_firebase/pages/login_page.dart';
 import 'package:chat_app_firebase/services/auth/auth_service.dart';
 import 'package:chat_app_firebase/services/chat/chat_services.dart';
 import 'package:chat_app_firebase/widgets/msg_title.dart';
@@ -17,9 +18,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  void signOut() async {
-    final authService = Provider.of<AuthService>(context, listen: false);
-    await authService.signOut();
+  Future<void> signOut() async {
+    context.read<ChatService>().signOut();
   }
 
   List<Map<String, dynamic>> profileList = [
@@ -126,8 +126,12 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         const Icon(Icons.search),
                         InkWell(
-                            onTap: () {
-                              signOut();
+                            onTap: () async {
+                              await context.read<ChatService>().signOut();
+                              Navigator.of(context)
+                                  .pushReplacement(MaterialPageRoute(
+                                builder: (context) => LoginPage(),
+                              ));
                             },
                             child: const Icon(Icons.logout)),
                       ],

@@ -1,5 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:chat_app_firebase/pages/register_page.dart';
 import 'package:chat_app_firebase/services/auth/auth_service.dart';
+import 'package:chat_app_firebase/services/chat/chat_services.dart';
 import 'package:flutter/material.dart';
 
 import 'package:chat_app_firebase/components/my_button.dart';
@@ -21,11 +23,13 @@ class _LoginPageState extends State<LoginPage> {
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
   void signIn() async {
-    final authService = Provider.of<AuthService>(context, listen: false);
+    final authService = Provider.of<ChatService>(context, listen: false);
 
     try {
       await authService.signInWithEmailandPassword(
-          emailController.text.toString(), passwordController.text.toString());
+          emailController.text.toString(),
+          passwordController.text.toString(),
+          context);
     } catch (e) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text(e.toString())));
@@ -93,7 +97,11 @@ class _LoginPageState extends State<LoginPage> {
                       width: 4,
                     ),
                     GestureDetector(
-                      onTap: widget.onTap,
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => RegisterPage(),
+                        ));
+                      },
                       child: const Text(
                         'Register now',
                         style: TextStyle(
