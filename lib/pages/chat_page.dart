@@ -33,8 +33,13 @@ class _ChatPageState extends State<ChatPage> {
     super.initState();
   }
 
+<<<<<<< HEAD
   getChatStream() {
     chatStream = context.read<ChatService>().getAllMessages(widget.toId);
+=======
+  getChatStream() async {
+    chatStream = await context.read<ChatService>().getAllMessages(widget.toId);
+>>>>>>> 0b6838c13a9322fbe9ccda85ec1b2289f840c438
     setState(() {});
   }
 
@@ -79,7 +84,11 @@ class _ChatPageState extends State<ChatPage> {
             ),
             Expanded(
                 child: StreamBuilder(
+<<<<<<< HEAD
               stream: context.read<ChatService>().getAllMessages(widget.toId),
+=======
+              stream: chatStream,
+>>>>>>> 0b6838c13a9322fbe9ccda85ec1b2289f840c438
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Center(
@@ -87,6 +96,7 @@ class _ChatPageState extends State<ChatPage> {
                   );
                 }
                 if (snapshot.hasData) {
+<<<<<<< HEAD
                   var allMessages = snapshot.data!.docs;
                   return allMessages.isNotEmpty
                       ? ListView.builder(
@@ -98,6 +108,17 @@ class _ChatPageState extends State<ChatPage> {
                           },
                         )
                       : Container();
+=======
+                  return ListView.builder(
+                    itemCount: snapshot.data!.docs.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        title: Text(
+                            '${Message.fromMap(snapshot.data!.docs[index].data()).message}'),
+                      );
+                    },
+                  );
+>>>>>>> 0b6838c13a9322fbe9ccda85ec1b2289f840c438
                 }
                 return Container();
               },
