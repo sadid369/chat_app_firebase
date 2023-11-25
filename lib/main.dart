@@ -2,8 +2,6 @@ import 'package:chat_app_firebase/cupertio_button.dart';
 import 'package:chat_app_firebase/firebase_options.dart';
 import 'package:chat_app_firebase/pages/login_page.dart';
 
-import 'package:chat_app_firebase/services/auth/auth_gate.dart';
-import 'package:chat_app_firebase/services/auth/auth_service.dart';
 import 'package:chat_app_firebase/services/chat/chat_services.dart';
 
 import 'package:firebase_core/firebase_core.dart';

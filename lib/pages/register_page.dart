@@ -1,7 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:chat_app_firebase/model/register.dart';
 import 'package:chat_app_firebase/pages/login_page.dart';
-import 'package:chat_app_firebase/services/auth/auth_service.dart';
+
 import 'package:chat_app_firebase/services/chat/chat_services.dart';
 import 'package:flutter/material.dart';
 import 'package:chat_app_firebase/components/my_button.dart';

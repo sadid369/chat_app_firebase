@@ -1,7 +1,7 @@
 import 'package:chat_app_firebase/model/register.dart';
 import 'package:chat_app_firebase/pages/chat_page.dart';
 import 'package:chat_app_firebase/pages/login_page.dart';
-import 'package:chat_app_firebase/services/auth/auth_service.dart';
+
 import 'package:chat_app_firebase/services/chat/chat_services.dart';
 import 'package:chat_app_firebase/widgets/msg_title.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
