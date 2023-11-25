@@ -95,4 +95,15 @@ class ChatService extends ChangeNotifier {
   Future<void> signOut() async {
     await firebaseAuth.signOut();
   }
+
+  void updateReadTime(String mid, String fromId) {
+    var chatId = getChatID(currentUserId, fromId);
+    var readTime = DateTime.now().millisecondsSinceEpoch;
+    firebaseFirestore
+        .collection('chatroom')
+        .doc(chatId)
+        .collection('messages')
+        .doc(mid)
+        .update({'read': readTime.toString()});
+  }
 }

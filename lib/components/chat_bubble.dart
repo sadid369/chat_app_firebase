@@ -25,53 +25,102 @@ class _ChatBubbleState extends State<ChatBubble> {
         : toMsgWidget();
   }
 
+//yellow
   Widget fromMsgWidget() {
+    var sentTime = TimeOfDay.fromDateTime(
+        DateTime.fromMillisecondsSinceEpoch(int.parse(widget.message.sent)));
+    var readTime = TimeOfDay.fromDateTime(
+        DateTime.fromMillisecondsSinceEpoch(int.parse(widget.message.read)));
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 8),
+          child: Text('${sentTime.format(context)}'),
+        ),
+        Flexible(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Container(
+                margin: EdgeInsets.all(11),
+                padding: EdgeInsets.all(11),
+                decoration: BoxDecoration(
+                  color: Colors.amber.shade100,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(21),
+                    topRight: Radius.circular(21),
+                    bottomLeft: Radius.circular(21),
+                  ),
+                ),
+                child: Text(widget.message.message),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Visibility(
+                    visible: widget.message.read.isNotEmpty,
+                    child: Text(
+                      readTime.format(context),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 7,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8),
+                    child: Icon(
+                      Icons.done_all_outlined,
+                      color:
+                          widget.message.read != "" ? Colors.blue : Colors.grey,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+//blue
+  Widget toMsgWidget() {
+    if (widget.message.read.isEmpty) {
+      context
+          .read<ChatService>()
+          .updateReadTime(widget.message.mId, widget.message.fromId);
+    }
     var sentTime = TimeOfDay.fromDateTime(
         DateTime.fromMillisecondsSinceEpoch(int.parse(widget.message.sent)));
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Flexible(
-          child: Container(
-            margin: EdgeInsets.all(11),
-            padding: EdgeInsets.all(11),
-            decoration: BoxDecoration(
-              color: Colors.amber.shade100,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(21),
-                topRight: Radius.circular(21),
-                bottomLeft: Radius.circular(21),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                margin: EdgeInsets.all(11),
+                padding: EdgeInsets.all(11),
+                decoration: BoxDecoration(
+                  color: Colors.blue.shade100,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(21),
+                    topRight: Radius.circular(21),
+                    bottomRight: Radius.circular(21),
+                  ),
+                ),
+                child: Text(widget.message.message),
               ),
-            ),
-            child: Text(widget.message.message),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(right: 8),
-          child: Text('${sentTime.format(context)}'),
-        )
-      ],
-    );
-  }
-
-  Widget toMsgWidget() {
-    var sentTime = TimeOfDay.fromDateTime(
-        DateTime.fromMillisecondsSinceEpoch(int.parse(widget.message.sent)));
-    return Row(
-      children: [
-        Flexible(
-          child: Container(
-            margin: EdgeInsets.all(11),
-            padding: EdgeInsets.all(11),
-            decoration: BoxDecoration(
-              color: Colors.blue.shade100,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(21),
-                topRight: Radius.circular(21),
-                bottomRight: Radius.circular(21),
-              ),
-            ),
-            child: Text(widget.message.message),
+              Padding(
+                  padding: const EdgeInsets.only(left: 8),
+                  child: Icon(
+                    Icons.done_all_outlined,
+                    color:
+                        widget.message.read != "" ? Colors.blue : Colors.grey,
+                  )),
+            ],
           ),
         ),
         Padding(
