@@ -43,11 +43,11 @@ class _ChatBubbleState extends State<ChatBubble> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Container(
-                margin: EdgeInsets.all(11),
-                padding: EdgeInsets.all(11),
+                margin: const EdgeInsets.all(11),
+                padding: const EdgeInsets.all(11),
                 decoration: BoxDecoration(
                   color: Colors.amber.shade100,
-                  borderRadius: BorderRadius.only(
+                  borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(21),
                     topRight: Radius.circular(21),
                     bottomLeft: Radius.circular(21),
@@ -64,7 +64,7 @@ class _ChatBubbleState extends State<ChatBubble> {
                       readTime.format(context),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 7,
                   ),
                   Padding(
@@ -101,11 +101,11 @@ class _ChatBubbleState extends State<ChatBubble> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                margin: EdgeInsets.all(11),
-                padding: EdgeInsets.all(11),
+                margin: const EdgeInsets.all(11),
+                padding: const EdgeInsets.all(11),
                 decoration: BoxDecoration(
                   color: Colors.blue.shade100,
-                  borderRadius: BorderRadius.only(
+                  borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(21),
                     topRight: Radius.circular(21),
                     bottomRight: Radius.circular(21),

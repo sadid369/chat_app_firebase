@@ -29,7 +29,7 @@ class _RegisterPageState extends State<RegisterPage> {
     if (uPasswordController.text.toString() !=
         uConfirmPasswordController.text.toString()) {
       ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Password not match')));
+          .showSnackBar(const SnackBar(content: Text('Password not match')));
       return;
     }
     final authService = context.read<ChatService>();
@@ -137,7 +137,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     GestureDetector(
                       onTap: () {
                         Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => LoginPage(),
+                          builder: (context) => const LoginPage(),
                         ));
                       },
                       child: const Text(

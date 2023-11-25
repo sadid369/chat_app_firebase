@@ -130,7 +130,7 @@ class _HomePageState extends State<HomePage> {
                               await context.read<ChatService>().signOut();
                               Navigator.of(context)
                                   .pushReplacement(MaterialPageRoute(
-                                builder: (context) => LoginPage(),
+                                builder: (context) => const LoginPage(),
                               ));
                             },
                             child: const Icon(Icons.logout)),
@@ -140,7 +140,7 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             Container(
@@ -156,7 +156,7 @@ class _HomePageState extends State<HomePage> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Container(
-                                margin: EdgeInsets.only(left: 10),
+                                margin: const EdgeInsets.only(left: 10),
                                 decoration: BoxDecoration(
                                     shape: BoxShape.circle,
                                     border: Border.all(
@@ -165,7 +165,7 @@ class _HomePageState extends State<HomePage> {
                                 alignment: Alignment.center,
                                 width: 60,
                                 height: 60,
-                                child: Icon(
+                                child: const Icon(
                                   Icons.add,
                                 )),
                           ],
@@ -173,7 +173,7 @@ class _HomePageState extends State<HomePage> {
                       : Column(
                           children: [
                             Container(
-                              margin: EdgeInsets.only(left: 10),
+                              margin: const EdgeInsets.only(left: 10),
                               width: 60,
                               height: 60,
                               child: ClipRRect(
@@ -184,12 +184,12 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 5,
                             ),
                             Text(
                               profileList[index]['name'],
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),
                             )
@@ -223,7 +223,7 @@ class _HomePageState extends State<HomePage> {
                     future: context.read<ChatService>().getAllUser(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Center(
+                        return const Center(
                           child: CircularProgressIndicator(),
                         );
                       }
@@ -257,12 +257,12 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       bottomNavigationBar: Container(
-        padding: EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         height: 70,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Icon(Icons.home_outlined),
+            const Icon(Icons.home_outlined),
             InkWell(
               onTap: () {},
               child: Container(
@@ -274,15 +274,15 @@ class _HomePageState extends State<HomePage> {
                 child: Row(
                   children: [
                     snackBarCalled
-                        ? Icon(
+                        ? const Icon(
                             Icons.abc,
                             color: Colors.black,
                           )
-                        : Icon(
+                        : const Icon(
                             Icons.add,
                             color: Colors.white,
                           ),
-                    Text(
+                    const Text(
                       'New Chat',
                       style: TextStyle(color: Colors.white),
                     )
@@ -290,7 +290,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
-            Icon(
+            const Icon(
               Icons.account_circle_outlined,
             )
           ],
