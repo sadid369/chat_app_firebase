@@ -29,8 +29,8 @@ class _ChatBubbleState extends State<ChatBubble> {
   Widget fromMsgWidget() {
     var sentTime = TimeOfDay.fromDateTime(
         DateTime.fromMillisecondsSinceEpoch(int.parse(widget.message.sent)));
-    var readTime = TimeOfDay.fromDateTime(
-        DateTime.fromMillisecondsSinceEpoch(int.parse(widget.message.read)));
+    // var readTime = TimeOfDay.fromDateTime(
+    //     DateTime.fromMillisecondsSinceEpoch(int.parse(widget.message.read)));
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -59,11 +59,14 @@ class _ChatBubbleState extends State<ChatBubble> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Visibility(
-                    visible: widget.message.read.isNotEmpty,
-                    child: Text(
-                      readTime.format(context),
-                    ),
-                  ),
+                      visible: widget.message.read != "",
+                      child: Text(widget.message.read == ""
+                          ? ""
+                          : TimeOfDay.fromDateTime(
+                                  DateTime.fromMillisecondsSinceEpoch(
+                                      int.parse(widget.message.read)))
+                              .format(context)
+                              .toString())),
                   const SizedBox(
                     width: 7,
                   ),
@@ -86,7 +89,7 @@ class _ChatBubbleState extends State<ChatBubble> {
 
 //blue
   Widget toMsgWidget() {
-    if (widget.message.read.isEmpty) {
+    if (widget.message.read == "") {
       context
           .read<ChatService>()
           .updateReadTime(widget.message.mId, widget.message.fromId);

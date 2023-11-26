@@ -33,10 +33,10 @@ class _ChatPageState extends State<ChatPage> {
     super.initState();
   }
 
-  getChatStream() async {
-    chatStream = await context.read<ChatService>().getAllMessages(widget.toId);
-    setState(() {});
-  }
+  // getChatStream() async {
+  //   chatStream = await context.read<ChatService>().getAllMessages(widget.toId);
+  //   setState(() {});
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +82,7 @@ class _ChatPageState extends State<ChatPage> {
               stream: context.read<ChatService>().getAllMessages(widget.toId),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(
+                  return const Center(
                     child: CircularProgressIndicator(),
                   );
                 }
