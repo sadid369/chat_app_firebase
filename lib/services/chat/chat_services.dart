@@ -106,4 +106,15 @@ class ChatService extends ChangeNotifier {
         .doc(mid)
         .update({'read': readTime.toString()});
   }
+
+  Stream<QuerySnapshot<Map<String, dynamic>>> getChatLstMsg(String toId) {
+    var chatId = getChatID(currentUserId, toId);
+    return firebaseFirestore
+        .collection('chatroom')
+        .doc(chatId)
+        .collection("messages")
+        .orderBy("sent", descending: true)
+        .limit(1)
+        .snapshots();
+  }
 }

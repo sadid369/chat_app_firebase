@@ -1,3 +1,4 @@
+import 'package:chat_app_firebase/model/message.dart';
 import 'package:chat_app_firebase/model/register.dart';
 import 'package:chat_app_firebase/pages/chat_page.dart';
 import 'package:chat_app_firebase/pages/login_page.dart';
@@ -232,22 +233,42 @@ class _HomePageState extends State<HomePage> {
                         itemBuilder: (context, index) {
                           var currUsers = snapshot.data![index];
                           return InkWell(
-                            onTap: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) {
-                                  return ChatPage(
-                                    name: currUsers.uName,
-                                    toId: currUsers.uid!,
-                                  );
+                              onTap: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) {
+                                    return ChatPage(
+                                      name: currUsers.uName,
+                                      toId: currUsers.uid!,
+                                    );
+                                  },
+                                ));
+                              },
+                              child: StreamBuilder(
+                                stream: context
+                                    .read<ChatService>()
+                                    .getChatLstMsg(currUsers.uid!),
+                                builder: (context, snapshot2) {
+                                  if (snapshot2.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  }
+                                  if (snapshot2.hasData) {
+                                    var allMessages = snapshot2.data!.docs;
+                                    return MsgTitle(
+                                      imgUrl: snapshot.data![index].uProfilePic,
+                                      name: snapshot.data![index].uName,
+                                      msg: allMessages.isEmpty
+                                          ? snapshot.data![index].uEmail
+                                          : Message.fromMap(
+                                                  allMessages[0].data())
+                                              .message,
+                                    );
+                                  }
+                                  return Container();
                                 },
                               ));
-                            },
-                            child: MsgTitle(
-                              imgUrl: snapshot.data![index].uProfilePic,
-                              name: snapshot.data![index].uName,
-                              msg: snapshot.data![index].uEmail,
-                            ),
-                          );
                         },
                       );
                     },
