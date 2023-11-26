@@ -79,7 +79,6 @@
 //       ChatService.updateReadTime(widget.msg.mId, widget.msg.fromId);
 //     }
 
-
 //     var sentTime = TimeOfDay.fromDateTime(
 //         DateTime.fromMillisecondsSinceEpoch(int.parse(widget.msg.sent)));
 //     return Row(
@@ -106,3 +105,11 @@
 //     );
 //   }
 // }
+
+// var readTime = TimeOfDay.fromDateTime(
+//     DateTime.fromMillisecondsSinceEpoch(int.parse(widget.message.read)));
+// var readTime =TimeOfDay.fromDateTime(
+//                                   DateTime.fromMillisecondsSinceEpoch(
+//                                       int.parse(widget.message.read)))
+//                               .format(context)
+//                               .toString())
