@@ -228,49 +228,53 @@ class _HomePageState extends State<HomePage> {
                           child: CircularProgressIndicator(),
                         );
                       }
-                      return ListView.builder(
-                        itemCount: snapshot.data!.length,
-                        itemBuilder: (context, index) {
-                          var currUsers = snapshot.data![index];
-                          return InkWell(
-                              onTap: () {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) {
-                                    return ChatPage(
-                                      name: currUsers.uName,
-                                      toId: currUsers.uid!,
-                                    );
+                      if (snapshot.hasData) {
+                        return ListView.builder(
+                          itemCount: snapshot.data!.length,
+                          itemBuilder: (context, index) {
+                            var currUsers = snapshot.data![index];
+                            return InkWell(
+                                onTap: () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) {
+                                      return ChatPage(
+                                        name: currUsers.uName,
+                                        toId: currUsers.uid!,
+                                      );
+                                    },
+                                  ));
+                                },
+                                child: StreamBuilder(
+                                  stream: context
+                                      .read<ChatService>()
+                                      .getChatLstMsg(currUsers.uid!),
+                                  builder: (context, snapshot2) {
+                                    if (snapshot2.connectionState ==
+                                        ConnectionState.waiting) {
+                                      return const Center(
+                                        child: CircularProgressIndicator(),
+                                      );
+                                    }
+                                    if (snapshot2.hasData &&
+                                        snapshot2.data != null) {
+                                      var allMessages = snapshot2.data!.docs;
+                                      Message? lastMsgModel;
+                                      if (allMessages.isNotEmpty) {
+                                        lastMsgModel = Message.fromMap(
+                                            allMessages[0].data());
+                                      }
+                                      return MsgTitle(
+                                        user: currUsers,
+                                        msg: lastMsgModel,
+                                      );
+                                    }
+                                    return Container();
                                   },
                                 ));
-                              },
-                              child: StreamBuilder(
-                                stream: context
-                                    .read<ChatService>()
-                                    .getChatLstMsg(currUsers.uid!),
-                                builder: (context, snapshot2) {
-                                  if (snapshot2.connectionState ==
-                                      ConnectionState.waiting) {
-                                    return Center(
-                                      child: CircularProgressIndicator(),
-                                    );
-                                  }
-                                  if (snapshot2.hasData) {
-                                    var allMessages = snapshot2.data!.docs;
-                                    return MsgTitle(
-                                      imgUrl: snapshot.data![index].uProfilePic,
-                                      name: snapshot.data![index].uName,
-                                      msg: allMessages.isEmpty
-                                          ? snapshot.data![index].uEmail
-                                          : Message.fromMap(
-                                                  allMessages[0].data())
-                                              .message,
-                                    );
-                                  }
-                                  return Container();
-                                },
-                              ));
-                        },
-                      );
+                          },
+                        );
+                      }
+                      return Container();
                     },
                   )),
             ),
