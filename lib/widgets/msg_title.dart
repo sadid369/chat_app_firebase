@@ -58,13 +58,15 @@ class _MsgTitleState extends State<MsgTitle> {
                   //actual msg summary
                   widget.msg == null
                       ? Text(widget.user.uEmail)
-                      : Text(
-                          widget.msg!.message,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey,
-                          ),
-                        ),
+                      : widget.msg!.magType == "image"
+                          ? Icon(Icons.image_outlined)
+                          : Text(
+                              widget.msg!.message,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey,
+                              ),
+                            ),
                 ],
               ),
             ],
@@ -76,7 +78,7 @@ class _MsgTitleState extends State<MsgTitle> {
               widget.msg == null
                   ? Container()
                   : Text(
-                      "${widget.msg!.sent}",
+                      "${TimeOfDay.fromDateTime(DateTime.fromMillisecondsSinceEpoch(int.parse(widget.msg!.sent))).format(context)}",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.grey,

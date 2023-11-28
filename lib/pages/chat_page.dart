@@ -1,8 +1,12 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:io';
+
 import 'package:chat_app_firebase/model/message.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 import 'package:chat_app_firebase/components/chat_bubble.dart';
@@ -27,16 +31,22 @@ class _ChatPageState extends State<ChatPage> {
   // final ChatService _chatService = ChatService();
   // final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   Stream<QuerySnapshot<Map<String, dynamic>>>? chatStream;
-
+  File? imgUrl;
+  String? pickedImageUrl;
   @override
   void initState() {
     super.initState();
   }
 
-  // getChatStream() async {
-  //   chatStream = await context.read<ChatService>().getAllMessages(widget.toId);
-  //   setState(() {});
-  // }
+  Future<void> pickedImage() async {
+    final ImagePicker imagePicker = ImagePicker();
+
+    var pickedImage = await imagePicker.pickImage(source: ImageSource.gallery);
+    if (pickedImage != null) {
+      imgUrl = File(pickedImage.path);
+      setState(() {});
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -117,6 +127,13 @@ class _ChatPageState extends State<ChatPage> {
       padding: const EdgeInsets.symmetric(horizontal: 25),
       child: Row(
         children: [
+          IconButton(
+              onPressed: () {
+                pickedImage();
+              },
+              icon: const Icon(
+                Icons.attach_file,
+              )),
           Expanded(
             child: MyTextField(
                 controller: _messageController,
@@ -125,10 +142,13 @@ class _ChatPageState extends State<ChatPage> {
           ),
           IconButton(
             onPressed: () {
-              context
-                  .read<ChatService>()
-                  .sendMessage(_messageController.text, widget.toId);
+              imgUrl == null
+                  ? context
+                      .read<ChatService>()
+                      .sendMessage(_messageController.text, widget.toId)
+                  : context.read<ChatService>().sendImage(imgUrl, widget.toId);
               _messageController.text = "";
+              imgUrl == null;
             },
             icon: const Icon(
               Icons.send,

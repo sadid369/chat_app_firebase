@@ -43,6 +43,8 @@ class _ChatBubbleState extends State<ChatBubble> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Container(
+                width: 200,
+                height: 200,
                 margin: const EdgeInsets.all(11),
                 padding: const EdgeInsets.all(11),
                 decoration: BoxDecoration(
@@ -53,7 +55,12 @@ class _ChatBubbleState extends State<ChatBubble> {
                     bottomLeft: Radius.circular(21),
                   ),
                 ),
-                child: Text(widget.message.message),
+                child: widget.message.magType == 'image'
+                    ? Image.network(
+                        widget.message.message,
+                        fit: BoxFit.cover,
+                      )
+                    : Text(widget.message.message),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -104,6 +111,8 @@ class _ChatBubbleState extends State<ChatBubble> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
+                width: 200,
+                height: 200,
                 margin: const EdgeInsets.all(11),
                 padding: const EdgeInsets.all(11),
                 decoration: BoxDecoration(
@@ -114,15 +123,13 @@ class _ChatBubbleState extends State<ChatBubble> {
                     bottomRight: Radius.circular(21),
                   ),
                 ),
-                child: Text(widget.message.message),
+                child: widget.message.magType == 'image'
+                    ? Image.network(
+                        widget.message.message,
+                        fit: BoxFit.cover,
+                      )
+                    : Text(widget.message.message),
               ),
-              Padding(
-                  padding: const EdgeInsets.only(left: 8),
-                  child: Icon(
-                    Icons.done_all_outlined,
-                    color:
-                        widget.message.read != "" ? Colors.blue : Colors.grey,
-                  )),
             ],
           ),
         ),
