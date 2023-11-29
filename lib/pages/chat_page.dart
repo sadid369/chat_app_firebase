@@ -33,6 +33,7 @@ class _ChatPageState extends State<ChatPage> {
   Stream<QuerySnapshot<Map<String, dynamic>>>? chatStream;
   File? imgUrl;
   String? pickedImageUrl;
+  bool isTextFieldEmpty = false;
   @override
   void initState() {
     super.initState();
@@ -129,32 +130,155 @@ class _ChatPageState extends State<ChatPage> {
         children: [
           IconButton(
               onPressed: () {
-                pickedImage();
+                pickedImage().then((value) {
+                  if (imgUrl != null) {
+                    showGeneralDialog(
+                      barrierLabel: 'Custom',
+                      barrierDismissible: true,
+                      context: context,
+                      pageBuilder: (context, animation, secondaryAnimation) {
+                        return Center(
+                          child: Container(
+                              height: 300,
+                              margin: EdgeInsets.symmetric(horizontal: 20),
+                              padding: EdgeInsets.all(20),
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(25)),
+                              child: Material(
+                                color: Colors.transparent,
+                                child: Center(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        width: 150,
+                                        height: 150,
+                                        child: Image.file(
+                                          imgUrl!,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      Container(
+                                        margin: EdgeInsets.symmetric(
+                                            horizontal: 20),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceAround,
+                                          children: [
+                                            SizedBox(
+                                              width: 100,
+                                              child: ElevatedButton(
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                          backgroundColor:
+                                                              Colors.black),
+                                                  onPressed: () {
+                                                    context
+                                                        .read<ChatService>()
+                                                        .sendImage(imgUrl,
+                                                            widget.toId);
+                                                    imgUrl == null;
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceAround,
+                                                    children: [
+                                                      Text('Photo'),
+                                                      SizedBox(
+                                                        width: 5,
+                                                      ),
+                                                      Icon(Icons.send),
+                                                    ],
+                                                  )),
+                                            ),
+                                            SizedBox(
+                                              width: 100,
+                                              child: ElevatedButton(
+                                                style: ElevatedButton.styleFrom(
+                                                    backgroundColor:
+                                                        Colors.black),
+                                                onPressed: () {
+                                                  imgUrl == null;
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: Text('Cancel'),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              )),
+                        );
+                      },
+                    );
+                  }
+                });
               },
               icon: const Icon(
                 Icons.attach_file,
               )),
           Expanded(
-            child: MyTextField(
-                controller: _messageController,
+            child: TextField(
+              onChanged: (value) {
+                value.isEmpty
+                    ? isTextFieldEmpty = false
+                    : isTextFieldEmpty = true;
+                setState(() {});
+              },
+              controller: _messageController,
+              obscureText: false,
+              decoration: InputDecoration(
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Colors.grey.shade200,
+                  ),
+                ),
+                focusedBorder: const OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Colors.white,
+                  ),
+                ),
+                filled: true,
+                fillColor: Colors.grey[100],
                 hintText: 'Enter Message',
-                obscureText: false),
-          ),
-          IconButton(
-            onPressed: () {
-              imgUrl == null
-                  ? context
-                      .read<ChatService>()
-                      .sendMessage(_messageController.text, widget.toId)
-                  : context.read<ChatService>().sendImage(imgUrl, widget.toId);
-              _messageController.text = "";
-              imgUrl == null;
-            },
-            icon: const Icon(
-              Icons.send,
-              size: 40,
+                hintStyle: const TextStyle(
+                  color: Colors.grey,
+                ),
+              ),
             ),
           ),
+          isTextFieldEmpty
+              ? IconButton(
+                  onPressed: () {
+                    context
+                        .read<ChatService>()
+                        .sendMessage(_messageController.text, widget.toId);
+
+                    _messageController.text = "";
+                  },
+                  icon: const Icon(
+                    Icons.send,
+                    size: 40,
+                  ),
+                )
+              : IconButton(
+                  onPressed: null,
+                  icon: const Icon(
+                    Icons.send,
+                    size: 40,
+                  ),
+                ),
         ],
       ),
     );

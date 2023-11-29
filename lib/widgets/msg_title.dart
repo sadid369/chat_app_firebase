@@ -22,14 +22,14 @@ class _MsgTitleState extends State<MsgTitle> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(bottom: 5),
+      margin: const EdgeInsets.only(bottom: 5),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           //leading Image
           Row(
             children: [
-              Container(
+              SizedBox(
                 width: 50,
                 height: 50,
                 child: ClipRRect(
@@ -41,7 +41,7 @@ class _MsgTitleState extends State<MsgTitle> {
                       fit: BoxFit.cover,
                     )),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 10,
               ),
               //body
@@ -51,7 +51,7 @@ class _MsgTitleState extends State<MsgTitle> {
                   //Name of the person
                   Text(
                     widget.user.uName,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -59,7 +59,7 @@ class _MsgTitleState extends State<MsgTitle> {
                   widget.msg == null
                       ? Text(widget.user.uEmail)
                       : widget.msg!.magType == "image"
-                          ? Icon(Icons.image_outlined)
+                          ? const Icon(Icons.image_outlined)
                           : Text(
                               widget.msg!.message,
                               style: const TextStyle(

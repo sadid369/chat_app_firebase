@@ -43,12 +43,14 @@ class _ChatBubbleState extends State<ChatBubble> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Container(
-                width: 200,
-                height: 200,
+                // width: 200,
+                // height: 200,
                 margin: const EdgeInsets.all(11),
                 padding: const EdgeInsets.all(11),
                 decoration: BoxDecoration(
-                  color: Colors.amber.shade100,
+                  color: widget.message.magType == 'image'
+                      ? Colors.white
+                      : Colors.amber.shade100,
                   borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(21),
                     topRight: Radius.circular(21),
@@ -56,9 +58,13 @@ class _ChatBubbleState extends State<ChatBubble> {
                   ),
                 ),
                 child: widget.message.magType == 'image'
-                    ? Image.network(
-                        widget.message.message,
-                        fit: BoxFit.cover,
+                    ? Container(
+                        width: 200,
+                        height: 200,
+                        child: Image.network(
+                          widget.message.message,
+                          fit: BoxFit.cover,
+                        ),
                       )
                     : Text(widget.message.message),
               ),
@@ -111,12 +117,14 @@ class _ChatBubbleState extends State<ChatBubble> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                width: 200,
-                height: 200,
+                // width: 200,
+                // height: 200,
                 margin: const EdgeInsets.all(11),
                 padding: const EdgeInsets.all(11),
                 decoration: BoxDecoration(
-                  color: Colors.blue.shade100,
+                  color: widget.message.magType == 'image'
+                      ? Colors.white
+                      : Colors.blue.shade100,
                   borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(21),
                     topRight: Radius.circular(21),
@@ -124,9 +132,13 @@ class _ChatBubbleState extends State<ChatBubble> {
                   ),
                 ),
                 child: widget.message.magType == 'image'
-                    ? Image.network(
-                        widget.message.message,
-                        fit: BoxFit.cover,
+                    ? Container(
+                        width: 200,
+                        height: 200,
+                        child: Image.network(
+                          widget.message.message,
+                          fit: BoxFit.cover,
+                        ),
                       )
                     : Text(widget.message.message),
               ),
